@@ -58,7 +58,7 @@ const LoginComponent = () => {
                             <p class="mt-3 d-inline-flex gap-2">
                                 <span>Not registered? <Link to="/register">Register here</Link></span>
                                 <span>Or continue with: </span>
-                                <a href="#" class="d-inline-flex btn btn btn-outline-danger" role="button" data-bs-toggle="button"><FaGoogle /></a>
+                                <a href="http://localhost:8080/oauth2/authorization/google" class="d-inline-flex btn btn btn-outline-danger" role="button" data-bs-toggle="button"><FaGoogle /></a>
                                 <a href="#" class="d-inline-flex btn btn btn-outline-primary" role="button" data-bs-toggle="button"><SiLinkedin /></a>
                                 <a href="#" class="d-inline-flex btn btn btn-outline-secondary" role="button" data-bs-toggle="button"><FaGithub /></a>
                             </p>

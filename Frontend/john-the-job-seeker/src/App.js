@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import RegisterComponent from './components/auth/RegisterComponent';
 import LoginComponent from './components/auth/LoginComponent';
+import RegisterComponent from './components/auth/RegisterComponent';
 import DashboardComponent from './components/main/DashboardComponent';
 
 const App = () => {

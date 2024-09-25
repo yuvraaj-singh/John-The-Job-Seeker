@@ -27,6 +27,20 @@ const RegisterComponent = () => {
         }
     };
 
+    const handleSignInWithGoogle = async (e) => {
+        e.preventDefault();
+        // try {
+        //     const response = await AuthService.signInWithGoogle();
+        //     setMessage(response.data);
+        //     if (response.data === 'Login successful') {
+        //         navigate('/login');
+        //     }
+        // } catch (error) {
+        //     setMessage('Login failed using google');
+        // }
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    };
+
     return (
         <div className="container mt-5">
             <div className="row justify-content-center">
@@ -77,7 +91,7 @@ const RegisterComponent = () => {
                             <p class="mt-3 d-inline-flex gap-2">
                                 <span>Already registered? <Link to="/login">Login here</Link></span>
                                 <span>Or continue with: </span>
-                                <a href="#" class="d-inline-flex btn btn btn-outline-danger" role="button" data-bs-toggle="button"><FaGoogle /></a>
+                                <a href="#" class="d-inline-flex btn btn btn-outline-danger" role="button" data-bs-toggle="button" onClick={handleSignInWithGoogle}><FaGoogle /></a>
                                 <a href="#" class="d-inline-flex btn btn btn-outline-primary" role="button" data-bs-toggle="button"><SiLinkedin /></a>
                                 <a href="#" class="d-inline-flex btn btn btn-outline-secondary" role="button" data-bs-toggle="button"><FaGithub /></a>
                             </p>
