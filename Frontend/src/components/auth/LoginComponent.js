@@ -62,13 +62,13 @@ const LoginComponent = () => {
                     <button type="submit" className="btn btn-primary form-submit">Login</button>
                 </form>
                 <div className="social-login">
-                    <p>Or login with:</p>
+                    <p>Or continue with:</p>
                     <div className="social-icons">
                         <a href="#" className="btn btn-outline-danger"><FaGoogle /></a>
                         <a href="#" className="btn btn-outline-primary"><SiLinkedin /></a>
                     </div>
                 </div>
-                <p className="not-registered">
+                <p className="already-registered">
                     Not registered? <Link to="/register">Register here</Link>
                 </p>
                 <p className="motivational-tagline">Unlock your potential, elevate your career.</p>

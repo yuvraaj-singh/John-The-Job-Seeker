@@ -95,7 +95,7 @@ const RegisterComponent = () => {
                     <button type="submit" className="btn btn-primary form-submit">Create Account</button>
                 </form>
                 <div className="social-login">
-                    <p>Or register with:</p>
+                    <p>Or continue with:</p>
                     <div className="social-icons">
                         <a href="#" className="btn btn-outline-danger" onClick={handleSignInWithGoogle}><FaGoogle /></a>
                         <a href="#" className="btn btn-outline-primary"><SiLinkedin /></a>
