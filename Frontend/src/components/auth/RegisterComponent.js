@@ -43,47 +43,54 @@ const RegisterComponent = () => {
                 <h2 className="form-title">Create an Account</h2>
                 {message && <div className="alert alert-info">{message}</div>}
                 <form onSubmit={handleRegister}>
-                    <div className="form-group form-group-inline">
-                        <div>
-                            <label>First Name</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label>Last Name</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
+                    <div className="form-group">
+                        <div class="row g-3">
+                            <div class="col">
+                                <label>First Name:</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div class="col">
+                                <label>Last Name:</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    required
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="form-group">
-                        <label>Email</label>
+                        <label>Email:</label>
                         <input
                             type="email"
+                            placeholder="name@example.com"
                             className="form-control"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>Password:</label>
                         <input
                             type="password"
                             className="form-control"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="form-group terms-and-conditions">
-                        <input type="checkbox" id="terms" />
-                        <label htmlFor="terms">I agree to the <a href="#">Terms and Conditions</a></label>
+                        <input type="checkbox" id="terms"  required/>
+                        <label htmlFor="terms">I agree to the <a href="#">Terms and Conditions*</a></label>
                     </div>
                     <button type="submit" className="btn btn-primary form-submit">Create Account</button>
                 </form>

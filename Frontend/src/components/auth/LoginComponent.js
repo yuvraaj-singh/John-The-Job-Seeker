@@ -27,47 +27,53 @@ const LoginComponent = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-6">
-                    <div className="card">
-                        <div className="card-header center" >Login Form</div>
-                        <div className="card-body">
-                            {message && <div className="alert alert-danger">{message}</div>}
-                            <form onSubmit={handleLogin}>
-                                <div className="form-group">
-                                    <label>Email</label>
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label>Password</label>
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </div>
-                                <button type="submit" className="btn btn-primary mt-3">Login</button>
-                            </form>
-                            <p class="mt-3 d-inline-flex gap-2">
-                                <span>Not registered? <Link to="/register">Register here</Link></span>
-                                <span>Or continue with: </span>
-                                <a href="http://localhost:8080/oauth2/authorization/google" class="d-inline-flex btn btn btn-outline-danger" role="button" data-bs-toggle="button"><FaGoogle /></a>
-                                <a href="#" class="d-inline-flex btn btn btn-outline-primary" role="button" data-bs-toggle="button"><SiLinkedin /></a>
-                                <a href="#" class="d-inline-flex btn btn btn-outline-secondary" role="button" data-bs-toggle="button"><FaGithub /></a>
-                            </p>
-                        </div>
+        <div className="register-container">
+            {/* Left Side - Image Section */}
+            <div className="illustration-section">
+                <img src="./Assets/note.png" alt="Illustration" className="illustration-image" />
+            </div>
+
+            {/* Right Side - Form Section */}
+            <div className="form-section">
+                <h2 className="form-title">Login</h2>
+                {message && <div className="alert alert-info">{message}</div>}
+                <form onSubmit={handleLogin}>
+                    <div className="form-group">
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            placeholder="name@example.com"
+                            className="form-control"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Password:</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary form-submit">Login</button>
+                </form>
+                <div className="social-login">
+                    <p>Or login with:</p>
+                    <div className="social-icons">
+                        <a href="#" className="btn btn-outline-danger"><FaGoogle /></a>
+                        <a href="#" className="btn btn-outline-primary"><SiLinkedin /></a>
                     </div>
                 </div>
+                <p className="not-registered">
+                    Not registered? <Link to="/register">Register here</Link>
+                </p>
+                <p className="motivational-tagline">Unlock your potential, elevate your career.</p>
             </div>
         </div>
     );
 };
-
 export default LoginComponent;
