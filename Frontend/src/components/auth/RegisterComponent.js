@@ -1,0 +1,106 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import AuthService from './AuthService';
+import { FaGoogle } from "react-icons/fa";
+import { SiLinkedin } from "react-icons/si";
+import './RegisterComponent.css'; // Ensure your CSS file is linked
+
+const RegisterComponent = () => {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await AuthService.register({ firstName, lastName, email, password });
+            setMessage(response.data);
+            if (response.data === 'User registered successfully') {
+                navigate('/login');
+            }
+        } catch (error) {
+            setMessage('Registration failed');
+        }
+    };
+
+    const handleSignInWithGoogle = async (e) => {
+        e.preventDefault();
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    };
+
+    return (
+        <div className="register-container">
+            {/* Left Side - Image Section */}
+            <div className="illustration-section">
+                <img src="./Assets/note.png" alt="Illustration" className="illustration-image" />
+            </div>
+
+            {/* Right Side - Form Section */}
+            <div className="form-section">
+                <h2 className="form-title">Create an Account</h2>
+                {message && <div className="alert alert-info">{message}</div>}
+                <form onSubmit={handleRegister}>
+                    <div className="form-group form-group-inline">
+                        <div>
+                            <label>First Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label>Last Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group terms-and-conditions">
+                        <input type="checkbox" id="terms" />
+                        <label htmlFor="terms">I agree to the <a href="#">Terms and Conditions</a></label>
+                    </div>
+                    <button type="submit" className="btn btn-primary form-submit">Create Account</button>
+                </form>
+                <div className="social-login">
+                    <p>Or register with:</p>
+                    <div className="social-icons">
+                        <a href="#" className="btn btn-outline-danger" onClick={handleSignInWithGoogle}><FaGoogle /></a>
+                        <a href="#" className="btn btn-outline-primary"><SiLinkedin /></a>
+                    </div>
+                </div>
+                <p className="already-registered">
+                    Already registered? <Link to="/login">Login here</Link>
+                </p>
+                <p className="motivational-tagline">Unlock your potential, elevate your career.</p>
+            </div>
+        </div>
+    );
+};
+
+export default RegisterComponent;
