@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const styles = {
@@ -56,35 +56,43 @@ const styles = {
 };
 
 const DashboardComponent = () => {
-    const navigate = useNavigate();
-    const userName = "John Doe"; // Simulated user name
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState('');
 
-    const handleGetStartedClick = () => {
-        navigate('/search_job'); 
-    };
+  useEffect(() => {
+      // Get the user's name from localStorage
+      const storedUserName = localStorage.getItem('userName');
+      if (storedUserName) {
+          setUserName(storedUserName);
+      }
+  }, []);
 
-    const handleLogout = () => {
-        // Perform logout logic here
-        console.log("Logging out...");  // Placeholder for actual logout logic
-        navigate('/login');  // Redirect to login page or home page after logout
-    };
+  const handleGetStartedClick = () => {
+      navigate('/search_job');
+  };
 
-    return (
-        <div style={styles.container}>
-            <span style={styles.userName}>{userName}</span>
-            <button style={styles.logoutButton} onClick={handleLogout}>Log Out</button>
-            <div style={styles.leftPanel}>
-                <img src="\Assets\carrier_tree.PNG" alt="Career Aspects Infographic" style={{ width: '100%', height: 'auto' }} />
-            </div>
-            
-            <div style={styles.rightPanel}>
-                <h1>Ready to Land Your Dream Job?</h1>
-                <p>Join thousands of others who have found perfect job matches through our platform.</p>
-                <button style={{ ...styles.button, ...styles.getStartedButton }} onClick={handleGetStartedClick}>Get Started</button>
-                <button style={{ ...styles.button, ...styles.uploadButton }}>Upload Resume</button>
-            </div>
-        </div>
-    );
+  const handleLogout = () => {
+      console.log("Logging out...");
+      localStorage.removeItem('userName'); // Clear stored user name
+      navigate('/login');
+  };
+
+  return (
+      <div style={styles.container}>
+          <span style={styles.userName}>Hello, {userName}</span>
+          <button style={styles.logoutButton} onClick={handleLogout}>Log Out</button>
+          <div style={styles.leftPanel}>
+              <img src="\Assets\carrier_tree.PNG" alt="Career Aspects Infographic" style={{ width: '100%', height: 'auto' }} />
+          </div>
+
+          <div style={styles.rightPanel}>
+              <h1>Ready to Land Your Dream Job?</h1>
+              <p>Join thousands of others who have found perfect job matches through our platform.</p>
+              <button style={{ ...styles.button, ...styles.getStartedButton }} onClick={handleGetStartedClick}>Get Started</button>
+              <button style={{ ...styles.button, ...styles.uploadButton }}>Upload Resume</button>
+          </div>
+      </div>
+  );
 };
 
 export default DashboardComponent;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const styles = {
@@ -94,48 +94,56 @@ const styles = {
 
 
     
-const SearchTab = () => {
-    const userName = "John Doe";
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-        // Perform logout logic here
-        console.log("Logging out...");  // Placeholder for actual logout logic
-        navigate('/');  // Redirect to login page or home page after logout
-    };
-    return (
-        <div style={styles.container}>
-            <span style={styles.userName}>{userName}</span>
-            <button style={styles.logoutButton} onClick={handleLogout}>Log Out</button>
-      <div style={styles.leftPanel}>
-        <img src="Assets/carrier_tree.png" alt="Descriptive Alt Text" style={styles.image} />
-      </div>
-      <div style={styles.rightPanel}>
-        <div style={styles.searchContainer}>
-          <input type="text" placeholder="Search by Job Title/Skills/Employer" style={styles.input} />
-          <button style={styles.searchButton}>Search</button>
-        </div>
-        <div style={styles.dropdownContainer}>
-          <div>
-            <label style={styles.label}>Location</label>
-            <select style={styles.dropdown}>
-              <option value="Oslo, Norway">Oslo, Norway</option>
-              {/* More options */}
-            </select>
+    const SearchTab = () => {
+      const navigate = useNavigate();
+      const [userName, setUserName] = useState('');
+  
+      useEffect(() => {
+          // Get the user's name from localStorage
+          const storedUserName = localStorage.getItem('userName');
+          if (storedUserName) {
+              setUserName(storedUserName);
+          }
+      }, []);
+  
+      const handleLogout = () => {
+          console.log("Logging out...");
+          localStorage.removeItem('userName'); // Clear stored user name
+          navigate('/'); // Redirect to login page or home page after logout
+      };
+  
+      return (
+          <div style={styles.container}>
+              <span style={styles.userName}>Hello, {userName}</span>
+              <button style={styles.logoutButton} onClick={handleLogout}>Log Out</button>
+              <div style={styles.leftPanel}>
+                  <img src="Assets/carrier_tree.png" alt="Descriptive Alt Text" style={styles.image} />
+              </div>
+  
+              <div style={styles.rightPanel}>
+                  <div style={styles.searchContainer}>
+                      <input type="text" placeholder="Search by Job Title/Skills/Employer" style={styles.input} />
+                      <button style={styles.searchButton}>Search</button>
+                  </div>
+                  <div style={styles.dropdownContainer}>
+                      <div>
+                          <label style={styles.label}>Location</label>
+                          <select style={styles.dropdown}>
+                              <option value="Oslo, Norway">Oslo, Norway</option>
+                              {/* More options */}
+                          </select>
+                      </div>
+                      <div>
+                          <label style={styles.label}>Category</label>
+                          <select style={styles.dropdown}>
+                              <option value="IT, Computer Science">IT, Computer Science</option>
+                              {/* More options */}
+                          </select>
+                      </div>
+                  </div>
+              </div>
           </div>
-          <div>
-            <label style={styles.label}>Category</label>
-            <select style={styles.dropdown}>
-              <option value="IT, Computer Science">IT, Computer Science</option>
-              {/* More options */}
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    );
-};
-
-
-export default SearchTab;
+      );
+  };
+  
+  export default SearchTab;

@@ -5,6 +5,8 @@ import { FaGoogle } from "react-icons/fa";
 import { SiLinkedin } from "react-icons/si";
 import { FaGithub } from "react-icons/fa6";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+
 
 const LoginComponent = () => {
     const [email, setEmail] = useState('');
@@ -16,7 +18,10 @@ const LoginComponent = () => {
         e.preventDefault();
         try {
             const response = await AuthService.login({ email, password });
-            if (response.data === 'Login successful') {
+            if (response.data.message === 'Login successful') {
+                // Save the user's name for further use
+                const userName = response.data.name;
+                localStorage.setItem('userName', userName);
                 navigate('/dashboard');
             } else {
                 setMessage('Invalid credentials');
