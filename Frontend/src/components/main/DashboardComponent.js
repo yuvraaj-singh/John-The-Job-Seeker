@@ -33,31 +33,46 @@ const styles = {
     uploadButton: {
       backgroundColor: '#2196F3',
     },
-    logoutButton: {
+    header: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      gap: '40px', // Space between the username and the logout button
+      padding: '20px',
+      width: '100%',
+      backgroundColor: '#ffffff',
       position: 'absolute',
-      top: '20px',
-      right: '20px',
-      padding: '10px 15px',
-      borderRadius: '8px',
-      border: '1px solid #000',
-      backgroundColor: 'transparent',
+      top: 0,
+      right: 0,
+  },
+  userName: {
+      fontSize: '16px',
       color: '#000',
+  },
+  logoutButton: {
+      padding: '8px 15px',
+      borderRadius: '0.25rem',
+      border: '1px solid black',
+      backgroundColor: 'white',
+      color: 'black',
       fontSize: '16px',
       cursor: 'pointer',
-    },
-    userName: {
-      position: 'absolute',
-      top: '30px',
-      right: '150px', // Adjust based on the size of the logout button and username display
-      color: '#000',
-      fontSize: '16px',
-      fontWeight: 'normal',
-    },
+      transition: 'background-color 0.15s ease-in-out, border-color 0.15s ease-in-out',
+  },
+  logoutButtonHover: {
+      backgroundColor: 'black',
+      borderColor: 'white',
+      color: "white"
+  },
+  
+  
+    
 };
 
 const DashboardComponent = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
       // Get the user's name from localStorage
@@ -79,8 +94,20 @@ const DashboardComponent = () => {
 
   return (
       <div style={styles.container}>
-          <span style={styles.userName}>Hello, {userName}</span>
-          <button style={styles.logoutButton} onClick={handleLogout}>Log Out</button>
+          <div style={styles.header}>
+            <span style={styles.userName}>Hello, {userName}</span>
+    <button
+        style={{
+            ...styles.logoutButton,
+            ...(isHovering ? styles.logoutButtonHover : {}),
+        }}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        onClick={handleLogout}
+    >
+        Log Out
+    </button>
+</div>
           <div style={styles.leftPanel}>
               <img src="\Assets\carrier_tree.PNG" alt="Career Aspects Infographic" style={{ width: '100%', height: 'auto' }} />
           </div>
