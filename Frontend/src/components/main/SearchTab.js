@@ -141,6 +141,16 @@ const styles = {
                           <label style={styles.label}>Category</label>
                           <select style={styles.dropdown}>
                               <option value="IT, Computer Science">IT, Computer Science</option>
+                              <option value="Software Development">Software Development</option>
+                              <option value="Data Science">Data Science</option>
+                              <option value="DevOps">DevOps</option>
+                              <option value="Cloud Computing">Cloud Computing</option>
+                              <option value="Cybersecurity">Cybersecurity</option>
+                              <option value="Machine Learning">Machine Learning</option>
+                              <option value="Network Administration">Network Administration</option>
+                              <option value="Technical Support">Technical Support</option>
+                              <option value="Database Management">Database Management</option>
+                              <option value="Quality Assurance">Quality Assurance</option>
                               {/* More options */}
                           </select>
                       </div>
