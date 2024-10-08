@@ -73,6 +73,22 @@ const DashboardComponent = () => {
       navigate('/login');
   };
 
+  const handleUploadResume = () => {
+    // Create a hidden file input element
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.doc,.docx'; // Acceptable file types
+    fileInput.onchange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            console.log("Uploaded file: ", file.name); // Handle the uploaded file here
+            navigate('/uploaded_file', { state: { fileName: file.name } }); // Redirect to new page and pass file name
+        }
+    };
+    fileInput.click(); // Trigger the file input dialog
+};
+
+
   return (
       <div style={styles.container}>
           <div style={styles.header}>
@@ -94,7 +110,7 @@ const DashboardComponent = () => {
               <h1>Ready to Land Your Dream Job?</h1>
               <p>Join thousands of others who have found perfect job matches through our platform.</p>
               <button style={{ ...styles.button, ...styles.getStartedButton }} onClick={handleGetStartedClick}>Get Started</button>
-              <button style={{ ...styles.button, ...styles.uploadButton }}>Upload Resume</button>
+              <button style={{ ...styles.button, ...styles.uploadButton }} onClick={handleUploadResume}>Upload Resume</button>
           </div>
       </div>
   );

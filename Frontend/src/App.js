@@ -3,6 +3,7 @@ import LoginComponent from './components/auth/LoginComponent';
 import RegisterComponent from './components/auth/RegisterComponent';
 import DashboardComponent from './components/main/DashboardComponent';
 import SearchTab from './components/main/SearchTab';
+import UploadedFilePage from './components/main/UploadedFilePage'; // Import the new component
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
                   <Route path="/login" element={<LoginComponent />} />
                   <Route path="/dashboard" element={<DashboardComponent />} />
                   <Route path="/search_job" element={<SearchTab />} />
+                  <Route path="/uploaded_file" element={<UploadedFilePage />} />
               </Routes>
           </div>
       </Router>
