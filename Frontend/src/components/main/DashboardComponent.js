@@ -74,19 +74,20 @@ const DashboardComponent = () => {
   };
 
   const handleUploadResume = () => {
-    // Create a hidden file input element
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.pdf,.doc,.docx'; // Acceptable file types
+    fileInput.accept = '.pdf,.doc,.docx';
     fileInput.onchange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            console.log("Uploaded file: ", file.name); // Handle the uploaded file here
-            navigate('/uploaded_file', { state: { fileName: file.name } }); // Redirect to new page and pass file name
-        }
+      const file = event.target.files[0];
+      if (file) {
+        const fileUrl = URL.createObjectURL(file);
+        navigate('/uploaded_file', { state: { fileName: file.name, fileUrl } });
+        console.log('Navigating with:', { fileName: file.name, fileUrl });
+      }
     };
-    fileInput.click(); // Trigger the file input dialog
-};
+    fileInput.click();
+  };
+  
 
 
   return (
