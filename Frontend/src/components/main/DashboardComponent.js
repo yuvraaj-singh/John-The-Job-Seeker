@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './logout.css';
 
 const styles = {
     container: {
@@ -44,27 +45,7 @@ const styles = {
       position: 'absolute',
       top: 0,
       right: 0,
-  },
-  userName: {
-      fontSize: '16px',
-      color: '#000',
-  },
-  logoutButton: {
-      padding: '8px 15px',
-      borderRadius: '0.25rem',
-      border: '1px solid black',
-      backgroundColor: 'white',
-      color: 'black',
-      fontSize: '16px',
-      cursor: 'pointer',
-      transition: 'background-color 0.15s ease-in-out, border-color 0.15s ease-in-out',
-  },
-  logoutButtonHover: {
-      backgroundColor: 'black',
-      borderColor: 'white',
-      color: "white"
-  },
-  
+  }
   
     
 };
@@ -95,18 +76,15 @@ const DashboardComponent = () => {
   return (
       <div style={styles.container}>
           <div style={styles.header}>
-            <span style={styles.userName}>Hello, {userName}</span>
-    <button
-        style={{
-            ...styles.logoutButton,
-            ...(isHovering ? styles.logoutButtonHover : {}),
-        }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-        onClick={handleLogout}
-    >
-        Log Out
-    </button>
+            <span className="userName">Hello, {userName}</span>
+        <button
+            className={`logoutButton ${isHovering ? 'logoutButtonHover' : ''}`}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+            onClick={handleLogout}
+        >
+            Log Out
+        </button>
 </div>
           <div style={styles.leftPanel}>
               <img src="\Assets\carrier_tree.PNG" alt="Career Aspects Infographic" style={{ width: '100%', height: 'auto' }} />

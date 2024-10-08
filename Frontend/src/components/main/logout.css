@@ -1,0 +1,21 @@
+.userName {
+    font-size: 16px;
+    color: #000;
+}
+
+.logoutButton {
+    padding: 8px 15px;
+    border-radius: 0.25rem;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.logoutButton:hover {
+    background-color: black;
+    border-color: white;
+    color: white;
+}
