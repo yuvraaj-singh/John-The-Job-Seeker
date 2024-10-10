@@ -108,7 +108,7 @@ const DashboardComponent = () => {
           </div>
 
           <div style={styles.rightPanel}>
-              <h1>Ready to Land Your Dream Job?</h1>
+              <h1>Ready to land your dream job?</h1>
               <p>Join thousands of others who have found perfect job matches through our platform.</p>
               <button style={{ ...styles.button, ...styles.getStartedButton }} onClick={handleGetStartedClick}>Get Started</button>
               <button style={{ ...styles.button, ...styles.uploadButton }} onClick={handleUploadResume}>Upload Resume</button>

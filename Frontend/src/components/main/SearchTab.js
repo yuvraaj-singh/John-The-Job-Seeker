@@ -106,6 +106,10 @@ const styles = {
           localStorage.removeItem('userName'); // Clear stored user name
           navigate('/'); // Redirect to login page or home page after logout
       };
+
+      const handleSearch = () => {
+        navigate('/dashboard_page'); // Redirect to the dashboard page
+      };
   
       return (
           <div style={styles.container}>
@@ -127,7 +131,7 @@ const styles = {
               <div style={styles.rightPanel}>
                   <div style={styles.searchContainer}>
                       <input type="text" placeholder="Search by Job Title/Skills/Employer" style={styles.input} />
-                      <button style={styles.searchButton}>Search</button>
+                      <button style={styles.searchButton} onClick={handleSearch}>Search</button>
                   </div>
                   <div style={styles.dropdownContainer}>
                       <div>
