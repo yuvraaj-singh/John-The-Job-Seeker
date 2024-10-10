@@ -1,5 +1,6 @@
 // DashboardPage.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const styles = {
   header: {
@@ -252,6 +253,7 @@ const jobListings = [
 
 const DashboardPage = () => {
   const [hoveredNavIndex, setHoveredNavIndex] = useState(null);
+  const navigate = useNavigate();
   const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
@@ -275,6 +277,11 @@ const DashboardPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    console.log("Logging out...");
+    navigate('/'); // Redirect to login page or home page after logout
+};
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -286,6 +293,7 @@ const DashboardPage = () => {
               style={hoveredNavIndex === index ? { ...styles.navButton, ...styles.navButtonHoverState } : styles.navButton}
               onMouseEnter={() => setHoveredNavIndex(index)}
               onMouseLeave={() => setHoveredNavIndex(null)}
+              onClick={tab === 'Log out' ? handleLogout : null}
             >
               {tab}
             </div>
