@@ -12,6 +12,7 @@ const styles = {
     backgroundColor: '#007bff',
     color: 'white',
     border: '2px solid black',
+    boxSizing: 'border-box', // Ensure no extra space at the top
   },
   container: {
     display: 'flex',
@@ -20,6 +21,12 @@ const styles = {
     backgroundColor: 'white',
     height: '100vh',
   },
+  title: {
+    textAlign: 'center',
+    color: '#007bff',
+    fontSize: '24px',
+    fontWeight: 'bold',
+},
   logo: {
     fontSize: '24px',
     fontWeight: 'bold',
@@ -62,9 +69,10 @@ const styles = {
     gap: '10px',
     alignItems: 'center',
     border: '2px solid #007bff',
-    color: '#007bff',  // Added this line to set the text color to #007bff
+    color: '#007bff',
+    flexShrink: 0, // Prevent left panel from expanding
+    boxSizing: 'border-box', // Ensure consistent sizing
   },
-
   rightPanel: {
     width: '40%',
     backgroundColor: 'white',
@@ -74,6 +82,8 @@ const styles = {
     flexDirection: 'column',
     gap: '10px',
     border: '2px solid #007bff',
+    boxSizing: 'border-box', // Ensure consistent sizing
+    flexShrink: 0, // Prevent right panel from expanding
   },
   jobGrid: {
     display: 'grid',
@@ -85,7 +95,7 @@ const styles = {
     padding: '10px 20px',
     backgroundColor: 'white',
     color: 'black',
-    borderRadius: '4px',
+    borderRadius: '20px', // Updated to curvy rectangle
     textAlign: 'center',
     fontSize: '16px',
     maxWidth: '100%',
@@ -134,6 +144,64 @@ const styles = {
     borderRadius: '5px',
     textAlign: 'center',
     marginTop: '20px',
+  },
+  uploadButton: {
+    padding: '10px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginBottom: '10px',
+  },
+  textField: {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '5px',
+    border: '2px solid #007bff',
+  },
+  iframe: {
+    width: '100%',
+    height: '500px',
+    border: 'none',
+    marginTop: '10px',
+  },
+  sendButton: {
+    padding: '10px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginTop: '10px',
+  },
+  commentDialog: {
+    marginTop: '10px',
+    padding: '10px',
+    border: '1px solid #007bff',
+    borderRadius: '5px',
+    minHeight: '50px',
+    maxHeight: '300px',
+    overflowY: 'auto',
+  },
+  chatMessage: {
+    margin: '5px 0',
+    padding: '10px',
+    borderRadius: '20px',
+    backgroundColor: '#f1f1f1',
+    maxWidth: '70%',
+    wordWrap: 'break-word', // Add word-wrap to contain long text within the message box
+    whiteSpace: 'pre-wrap', // Ensure long text breaks properly without expanding the message box
+  },
+  chatMessageUser: {
+    textAlign: 'right',
+    color: '#007bff',
+    backgroundColor: '#e1f5fe',
+    alignSelf: 'flex-end',
+    maxWidth: '50%',
+    marginLeft: 'auto',
+    wordWrap: 'break-word', // Add word-wrap to contain long text within the message box
+    whiteSpace: 'pre-wrap', // Ensure long text breaks properly without expanding the message box
   },
 };
 
@@ -185,6 +253,27 @@ const jobListings = [
 const DashboardPage = () => {
   const [hoveredNavIndex, setHoveredNavIndex] = useState(null);
   const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([
+    { author: 'Carrier Coach', text: 'Hi, how can I help you with?' },
+  ]);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setFileUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSendComment = () => {
+    if (comment.trim()) {
+      setComments([...comments, { author: 'User', text: comment }]);
+      setComment('');
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -205,7 +294,7 @@ const DashboardPage = () => {
       </div>
       <div style={styles.contentContainer}>
         <div style={styles.leftPanel}>
-          <h2>Job List</h2>
+        <h1 style={styles.title}>Job List </h1>
           <div style={styles.jobGrid}>
             {jobListings.map((job, index) => (
               <div
@@ -230,11 +319,21 @@ const DashboardPage = () => {
           </div>
         </div>
         <div style={styles.rightPanel}>
-          <h2>Improve CV</h2>
-          <button style={styles.navButton}>Upload your CV</button>
-          <button style={styles.navButton}>view CV</button>
-          <div style={styles.card}>AI generated Summary of the CV</div>
-          <div style={styles.chatButton}>chat/message</div>
+        <h1 style={styles.title}>Improve CV</h1>
+          <button style={styles.uploadButton} onClick={() => document.getElementById('fileInput').click()}>Choose File</button>
+          <input id="fileInput" type="file" accept="application/pdf" onChange={handleFileUpload} style={{ display: 'none' }} />
+          {fileUrl && (
+            <iframe src={fileUrl} style={styles.iframe} title="PDF Viewer" />
+          )}
+          <div style={styles.commentDialog}>
+            {comments.map((c, index) => (
+              <div key={index} style={c.author === 'User' ? { ...styles.chatMessage, ...styles.chatMessageUser } : styles.chatMessage}>
+                <strong>{c.author}:</strong> {c.text}
+              </div>
+            ))}
+          </div>
+          <textarea placeholder="Add your comments here..." style={styles.textField} rows="4" value={comment} onChange={(e) => setComment(e.target.value)} />
+          <button style={styles.sendButton} onClick={handleSendComment}>Send</button>
         </div>
       </div>
       <div style={styles.preferencesPanel}>
