@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from './AuthService';
-import { FaGoogle } from "react-icons/fa";
-import { SiLinkedin } from "react-icons/si";
+import LoginWithGoogle from './LoginWithGoogle';
 import './RegisterComponent.css'; // Ensure your CSS file is linked
 
-const RegisterComponent = () => {
+const RegisterComponent = ( {onUserLogin} ) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -24,11 +23,6 @@ const RegisterComponent = () => {
         } catch (error) {
             setMessage('Registration failed');
         }
-    };
-
-    const handleSignInWithGoogle = async (e) => {
-        e.preventDefault();
-        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
     };
 
     return (
@@ -97,8 +91,7 @@ const RegisterComponent = () => {
                 <div className="social-login">
                     <p>Or continue with:</p>
                     <div className="social-icons">
-                        <a href="#" className="btn btn-outline-danger" onClick={handleSignInWithGoogle}><FaGoogle /></a>
-                        <a href="#" className="btn btn-outline-primary"><SiLinkedin /></a>
+                    <LoginWithGoogle onUserLogin={onUserLogin} />
                     </div>
                 </div>
                 <p className="already-registered">

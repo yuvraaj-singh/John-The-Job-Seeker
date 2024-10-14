@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from './AuthService';
-import { FaGoogle } from "react-icons/fa";
-import { SiLinkedin } from "react-icons/si";
-import { FaGithub } from "react-icons/fa6";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import LoginWithGoogle from './LoginWithGoogle';
 
-const LoginComponent = () => {
+const LoginComponent = ({ onUserLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [user, setUser] = useState([]);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -17,6 +16,7 @@ const LoginComponent = () => {
         try {
             const response = await AuthService.login({ email, password });
             if (response.data === 'Login successful') {
+                onUserLogin(response.data);
                 navigate('/dashboard');
             } else {
                 setMessage('Invalid credentials');
@@ -64,8 +64,7 @@ const LoginComponent = () => {
                 <div className="social-login">
                     <p>Or continue with:</p>
                     <div className="social-icons">
-                        <a href="#" className="btn btn-outline-danger"><FaGoogle /></a>
-                        <a href="#" className="btn btn-outline-primary"><SiLinkedin /></a>
+                        <LoginWithGoogle onUserLogin={onUserLogin} />
                     </div>
                 </div>
                 <p className="already-registered">
