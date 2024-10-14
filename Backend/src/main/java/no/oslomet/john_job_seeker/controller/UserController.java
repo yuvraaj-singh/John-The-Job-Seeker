@@ -27,7 +27,7 @@ public class UserController {
         if (existingUser != null) {
             return "Email already exists";
         }
-        userService.saveUser(user);
+//        userService.saveUser(user);
         return "User registered successfully";
     }
 

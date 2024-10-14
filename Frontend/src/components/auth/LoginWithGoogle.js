@@ -19,18 +19,12 @@ const LoginWithGoogle = ({ onUserLogin }) => {
         }
     });
 
-    const handleLogoutWithGoogle = () => {
-        googleLogout();
-        onUserLogin(null);  // Clear the user object
-    };
 
     const getUserDetailsFromGoogleServer = async (codeResponse) => {
         try {
             const response = await fetch('https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + codeResponse.access_token);
             const data = await response.json();
-            console.log('Data:', data);
-            /* setUser([data]); */
-            return data;
+            return await data;
         } catch (error) {
             console.error('Error fetching user details:', error);
         }
@@ -38,7 +32,7 @@ const LoginWithGoogle = ({ onUserLogin }) => {
 
     return (
         <a className="btn btn-outline-danger" onClick={handleLoginWithGoogle}>
-            <FaGoogle />
+           <FaGoogle />
         </a>
     );
 };

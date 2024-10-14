@@ -13,7 +13,7 @@ const DashboardComponent = ({ user, onLogout }) => {
     return (
         <div className="container mt-5">
             <h2>Dashboard</h2>
-            <p>Welcome, {user?.email}!</p>
+            <p>Welcome, {user?.name}!</p>
             <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
         </div>
     );
