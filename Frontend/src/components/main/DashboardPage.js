@@ -114,6 +114,10 @@ const styles = {
     backgroundColor: '#007bff',
     color: 'white',
   },
+  cardSelected: {
+    backgroundColor: '#007bff',
+    color: 'white',
+  },
   jobTitle: {
     fontSize: '18px',
     fontWeight: 'bold',
@@ -283,6 +287,7 @@ const DashboardPage = () => {
   const [comments, setComments] = useState([
     { author: 'Carrier Coach', text: 'Hi, how can I help you with?' },
   ]);
+  const [selectedJobIndex, setSelectedJobIndex] = useState(null);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -302,6 +307,22 @@ const DashboardPage = () => {
   const handleLogout = () => {
     console.log("Logging out...");
     navigate('/'); // Redirect to login page or home page after logout
+  };
+
+  const handleApplyPreferences = () => {
+    console.log('Preferences Applied:');
+    console.log('Work Percentage:', document.querySelector('select[name="work-percentage"]').value);
+    console.log('Location:', document.querySelector('select[name="location"]').value);
+    console.log('Technologies:', document.querySelector('select[name="technologies"]').value);
+  };
+
+  const handleJobClick = (job, index) => {
+    console.log('Job Clicked:', job.title);
+    console.log('Company:', job.company);
+    console.log('Deadline:', job.deadline);
+    console.log('Languages:', job.programmingLanguages);
+    console.log('Experience:', job.experience);
+    setSelectedJobIndex(index);
   };
 
   return (
@@ -329,9 +350,16 @@ const DashboardPage = () => {
             {jobListings.map((job, index) => (
               <div
                 key={index}
-                style={hoveredCardIndex === index ? { ...styles.card, ...styles.cardHover } : styles.card}
+                style={
+                  selectedJobIndex === index
+                    ? { ...styles.card, ...styles.cardSelected }
+                    : hoveredCardIndex === index
+                    ? { ...styles.card, ...styles.cardHover }
+                    : styles.card
+                }
                 onMouseEnter={() => setHoveredCardIndex(index)}
                 onMouseLeave={() => setHoveredCardIndex(null)}
+                onClick={() => handleJobClick(job, index)}
               >
                 <div style={styles.jobTitle}>{job.title}</div>
                 <div style={styles.jobDetails}>
@@ -370,14 +398,14 @@ const DashboardPage = () => {
         <div className="dropdownContainer">
           <div>
             <label>Work percentage:</label>
-            <select style={styles.dropdown}>
+            <select name="work-percentage" style={styles.dropdown}>
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
             </select>
           </div>
           <div>
             <label>Location:</label>
-            <select style={styles.dropdown}>
+            <select name="location" style={styles.dropdown}>
               <option value="oslo">Oslo</option>
               <option value="bergen">Bergen</option>
               <option value="trondheim">Trondheim</option>
@@ -385,7 +413,7 @@ const DashboardPage = () => {
           </div>
           <div>
             <label>Technologies:</label>
-            <select style={styles.dropdown}>
+            <select name="technologies" style={styles.dropdown}>
               <option value="java">Java</option>
               <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
@@ -394,7 +422,7 @@ const DashboardPage = () => {
               <option value="sql">SQL</option>
             </select>
           </div>
-          <button style={styles.sendButton}>Apply</button>
+          <button style={styles.sendButton} onClick={handleApplyPreferences}>Apply</button>
         </div>
       </div>
     </div>
