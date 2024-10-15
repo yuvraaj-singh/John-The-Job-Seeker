@@ -6,9 +6,12 @@ import no.oslomet.john_job_seeker.repository.UserRepository;
 import no.oslomet.john_job_seeker.payload.authentication.AuthenticationRequest;
 import no.oslomet.john_job_seeker.payload.authentication.AuthenticationResponse;
 import no.oslomet.john_job_seeker.service.AuthenticationService;
+import no.oslomet.john_job_seeker.utils.GoogleOauthVerifier;
 import no.oslomet.john_job_seeker.utils.PasswordEncorder;
 import no.oslomet.john_job_seeker.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,12 +19,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
-    private final AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 
-    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) {
+    private AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+
+    private final GoogleOauthVerifier googleOauthVerifier = new GoogleOauthVerifier();
+
+    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException {
 
         if(authenticationRequest.getToken()){
-            authenticationRequest.getUser().setPassword(RandomStringGenerator.generateRandomString());
+            UserDTO userDTO = googleOauthVerifier.getUserDetails(authenticationRequest.getTokenSecret());
+            if(userDTO.getEmail().equals(authenticationRequest.getUser().getEmail())){
+                authenticationRequest.getUser().setFirstName(userDTO.getFirstName());
+                authenticationRequest.getUser().setLastName(userDTO.getLastName());
+                authenticationRequest.getUser().setPassword(RandomStringGenerator.generateRandomString());
+                authenticationResponse.setTokenUser(Boolean.TRUE);
+            }else {
+                authenticationResponse.setError(Boolean.TRUE);
+                authenticationResponse.setMessage("Token is not valid");
+            }
         }
 
         if(userRepository.findByEmail(authenticationRequest.getUser().getEmail()) != null){
@@ -37,10 +52,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return authenticationResponse;
     }
 
-    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws JSONException {
 
         User user = userRepository.findByEmail(authenticationRequest.getUser().getEmail());
-        if(user != null){
+        if(authenticationRequest.getToken() && user != null){
+            UserDTO userDTO = googleOauthVerifier.getUserDetails(authenticationRequest.getTokenSecret());
+            if(user.getEmail().equals(userDTO.getEmail())){
+                authenticationResponse.setUser(userDTO);
+                authenticationResponse.setMessage("Login successful");
+                authenticationResponse.setError(Boolean.FALSE);
+                authenticationResponse.setTokenUser(Boolean.TRUE);
+            }else{
+                authenticationResponse.setError(Boolean.TRUE);
+                authenticationResponse.setMessage("Token Expired");
+            }
+
+        }
+        else if(user != null){
             if(PasswordEncorder.matchEncodedString(authenticationRequest.getUser().getPassword(), user.getPassword())){
                 authenticationResponse.setUser(new UserDTO(user.getFirstName(),user.getLastName(),user.getEmail()));
                 authenticationResponse.setMessage("Login successful");
@@ -50,7 +78,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 authenticationResponse.setError(Boolean.TRUE);
                 authenticationResponse.setMessage("Bad credentials");
             }
-        }else {
+        }
+        else {
             if(authenticationRequest.getToken()){
                 return register(authenticationRequest);
             }

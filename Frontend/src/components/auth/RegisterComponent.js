@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from './AuthService';
+import { AuthenticationRequest } from '../../payload/AuthenticationRequest';
+import { AuthenticationResponse } from '../../payload/AuthenticationResponse';
 import LoginWithGoogle from './LoginWithGoogle';
 import './RegisterComponent.css'; // Ensure your CSS file is linked
 
@@ -15,11 +17,21 @@ const RegisterComponent = ( {onUserLogin} ) => {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await AuthService.register({ firstName, lastName, email, password });
-            setMessage(response.data);
-            if (response.data === 'User registered successfully') {
+
+            const registerRequest = AuthenticationRequest(firstName, lastName, email, password);
+            const response = await AuthService.register(registerRequest);
+            console.log('Respone: ', response);
+            const { error, message, user } = AuthenticationResponse(response.data);
+
+            console.log('Register Response: ', response.data);
+
+            if(!error) {
+                onUserLogin(user);
                 navigate('/login');
+            } else {
+                setMessage(message);
             }
+
         } catch (error) {
             setMessage('Registration failed');
         }

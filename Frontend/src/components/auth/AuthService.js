@@ -1,19 +1,20 @@
 import axios from 'axios';
 
 const API_BASE_URL = "http://localhost:8080/api";
-const SIGN_IN_WITH_GOOGLE_URL = "http://localhost:8080/oauth2/authorization/google";
 
 class AuthService {
-    register(user) {
-        return axios.post(`${API_BASE_URL}/register`, user);
+    register(registerRequest) {
+        console.log('Register Request: ',registerRequest);
+        return axios.post(`${API_BASE_URL}/auth/register`, registerRequest);
     }
 
-    login(credentials) {
-        return axios.post(`${API_BASE_URL}/login`, credentials);
+    login(loginRequest) {
+        console.log('Login Request: ',loginRequest);
+        return axios.post(`${API_BASE_URL}/auth/login`, loginRequest);
     }
 
     signInWithGoogle() {
-        return axios.get(SIGN_IN_WITH_GOOGLE_URL);
+        return;
     }
 }
 

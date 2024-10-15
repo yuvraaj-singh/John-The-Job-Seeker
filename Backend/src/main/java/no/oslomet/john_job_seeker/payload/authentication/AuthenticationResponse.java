@@ -8,4 +8,5 @@ public class AuthenticationResponse {
     private UserDTO user;
     private String message;
     private Boolean error;
+    private Boolean tokenUser = false;
 }

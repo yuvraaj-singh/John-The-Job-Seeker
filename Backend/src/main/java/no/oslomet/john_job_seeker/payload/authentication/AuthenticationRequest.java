@@ -6,5 +6,6 @@ import no.oslomet.john_job_seeker.model.User;
 @Data
 public class AuthenticationRequest {
     private User user;
-    private Boolean token;
+    private Boolean token = false;
+    private String tokenSecret;
 }

@@ -8,6 +8,7 @@ import DashboardComponent from './components/main/DashboardComponent';
 function App() {
     const [user, setUser] = useState(null);
 
+
     // Check if user is already logged in by looking at localStorage
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -19,6 +20,7 @@ function App() {
     // Function to handle login and registration success
     const handleUserLogin = (userData) => {
         setUser(userData);
+        console.log('User: ', userData);
         localStorage.setItem('user', JSON.stringify(userData));  // Persist user in localStorage
     };
 

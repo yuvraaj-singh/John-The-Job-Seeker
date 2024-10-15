@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from './AuthService';
+import { AuthenticationRequest } from '../../payload/AuthenticationRequest';
+import { AuthenticationResponse } from '../../payload/AuthenticationResponse';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginWithGoogle from './LoginWithGoogle';
 
@@ -8,21 +10,26 @@ const LoginComponent = ({ onUserLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
-    const [user, setUser] = useState([]);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+
         try {
-            const response = await AuthService.login({ email, password });
-            if (response.data === 'Login successful') {
-                onUserLogin(response.data);
+
+            const loginRequest = AuthenticationRequest(null, null, email, password);
+            const response = await AuthService.login(loginRequest);
+            const { error, message, user } = AuthenticationResponse(response.data);
+            console.log('User: ', user);
+            if (!error) {
+                onUserLogin(user);
                 navigate('/dashboard');
             } else {
-                setMessage('Invalid credentials');
+                setMessage(message);
             }
+
         } catch (error) {
-            setMessage('Invalid credentials');
+            setMessage('Login failed. Please try again.');
         }
     };
 
