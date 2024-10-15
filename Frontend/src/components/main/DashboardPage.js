@@ -79,6 +79,8 @@ const styles = {
     color: '#007bff',
     flexShrink: 0, // Prevent left panel from expanding
     boxSizing: 'border-box', // Ensure consistent sizing
+    overflowY: 'auto', // Add scroll for overflowing content
+    maxHeight: '700px', // Limit height to allow scrolling
   },
   rightPanel: {
     width: '40%',
@@ -97,6 +99,8 @@ const styles = {
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '10px',
     width: '100%',
+    maxHeight: '500px', // Limit height to allow scrolling
+    overflowY: 'auto', // Add scroll for overflowing job listings
   },
   card: {
     padding: '10px 20px',
@@ -274,6 +278,48 @@ const jobListings = [
     deadline: 'May 1, 2025',
     programmingLanguages: 'Java, SQL',
     experience: '0 years (Internship)',
+  },
+  {
+    title: 'Backend Developer',
+    company: 'Innovate Solutions',
+    deadline: 'Mar 15, 2025',
+    programmingLanguages: 'Node.js, Express',
+    experience: '1-3 years',
+  },
+  {
+    title: 'Fullstack Engineer',
+    company: 'TechNova',
+    deadline: 'Apr 30, 2025',
+    programmingLanguages: 'JavaScript, Python',
+    experience: '3-5 years',
+  },
+  {
+    title: 'Systems Analyst',
+    company: 'NetTech',
+    deadline: 'Jun 1, 2025',
+    programmingLanguages: 'SQL, Python',
+    experience: '2-4 years',
+  },
+  {
+    title: 'AI Specialist',
+    company: 'AI Visionary',
+    deadline: 'Jul 20, 2025',
+    programmingLanguages: 'Python, TensorFlow',
+    experience: '4-6 years',
+  },
+  {
+    title: 'DevOps Engineer',
+    company: 'CloudSync',
+    deadline: 'Aug 10, 2025',
+    programmingLanguages: 'Docker, Kubernetes',
+    experience: '3-5 years',
+  },
+  {
+    title: 'UI/UX Designer',
+    company: 'Creative Minds',
+    deadline: 'Sep 25, 2025',
+    programmingLanguages: 'HTML, CSS, JavaScript',
+    experience: '1-3 years',
   },
 ];
 
