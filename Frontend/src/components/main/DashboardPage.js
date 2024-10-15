@@ -1,19 +1,23 @@
 // DashboardPage.js
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const styles = {
   header: {
+    height: '60px',
+    flexShrink: 0,
+    width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100vw',
-    height: '60px',
-    padding: '0 10px',
     backgroundColor: '#007bff',
-    color: 'white',
-    border: '2px solid black',
-    boxSizing: 'border-box', // Ensure no extra space at the top
+    padding: '0 20px',
+    boxSizing: 'border-box',
+    position: 'fixed', // Ensure header covers the entire page
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000, // Keep header on top
   },
   container: {
     display: 'flex',
@@ -21,6 +25,7 @@ const styles = {
     alignItems: 'center',
     backgroundColor: 'white',
     height: '100vh',
+    paddingTop: '60px', // Add padding to prevent content from being hidden under the fixed header
   },
   title: {
     textAlign: 'center',
@@ -31,6 +36,7 @@ const styles = {
   logo: {
     fontSize: '24px',
     fontWeight: 'bold',
+    color: 'white',
   },
   navButtons: {
     display: 'flex',
@@ -131,6 +137,7 @@ const styles = {
     width: '100%',
     marginTop: '20px',
     border: '2px solid #007bff',
+    position: 'relative',
   },
   preferenceItem: {
     display: 'flex',
@@ -175,6 +182,10 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
     marginTop: '10px',
+    position: 'relative',
+    right: '0',
+    bottom: '0',
+    marginLeft: 'auto', // Align button to the right within preferences panel
   },
   commentDialog: {
     marginTop: '10px',
@@ -203,6 +214,17 @@ const styles = {
     marginLeft: 'auto',
     wordWrap: 'break-word', // Add word-wrap to contain long text within the message box
     whiteSpace: 'pre-wrap', // Ensure long text breaks properly without expanding the message box
+  },
+  dropdown: {
+    padding: '10px',
+    borderRadius: '5px',
+    border: '2px solid #007bff',
+    backgroundColor: 'white',
+    fontSize: '16px',
+    color: '#007bff',
+    cursor: 'pointer',
+    width: '100%',
+    marginBottom: '10px',
   },
 };
 
@@ -252,8 +274,8 @@ const jobListings = [
 ];
 
 const DashboardPage = () => {
-  const [hoveredNavIndex, setHoveredNavIndex] = useState(null);
   const navigate = useNavigate();
+  const [hoveredNavIndex, setHoveredNavIndex] = useState(null);
   const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
@@ -280,7 +302,7 @@ const DashboardPage = () => {
   const handleLogout = () => {
     console.log("Logging out...");
     navigate('/'); // Redirect to login page or home page after logout
-};
+  };
 
   return (
     <div style={styles.container}>
@@ -345,9 +367,35 @@ const DashboardPage = () => {
         </div>
       </div>
       <div style={styles.preferencesPanel}>
-        <div style={styles.preferenceItem}><span>Work percentage</span> <span>Full-time</span></div>
-        <div style={styles.preferenceItem}><span>Location</span> <span>Oslo</span></div>
-        <div style={styles.preferenceItem}><span>Technologies</span> <span>Java, Python</span></div>
+        <div className="dropdownContainer">
+          <div>
+            <label>Work percentage:</label>
+            <select style={styles.dropdown}>
+              <option value="full-time">Full-time</option>
+              <option value="part-time">Part-time</option>
+            </select>
+          </div>
+          <div>
+            <label>Location:</label>
+            <select style={styles.dropdown}>
+              <option value="oslo">Oslo</option>
+              <option value="bergen">Bergen</option>
+              <option value="trondheim">Trondheim</option>
+            </select>
+          </div>
+          <div>
+            <label>Technologies:</label>
+            <select style={styles.dropdown}>
+              <option value="java">Java</option>
+              <option value="python">Python</option>
+              <option value="javascript">JavaScript</option>
+              <option value="csharp">C#</option>
+              <option value="react">React</option>
+              <option value="sql">SQL</option>
+            </select>
+          </div>
+          <button style={styles.sendButton}>Apply</button>
+        </div>
       </div>
     </div>
   );
