@@ -1,7 +1,7 @@
 package no.oslomet.john_job_seeker.controller;
 
-import no.oslomet.john_job_seeker.response.AuthenticationRequest;
-import no.oslomet.john_job_seeker.response.AuthenticationResponse;
+import no.oslomet.john_job_seeker.payload.authentication.AuthenticationRequest;
+import no.oslomet.john_job_seeker.payload.authentication.AuthenticationResponse;
 import no.oslomet.john_job_seeker.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

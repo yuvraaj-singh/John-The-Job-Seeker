@@ -1,5 +1,6 @@
 package no.oslomet.john_job_seeker.utils;
 
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class PasswordEncorder {

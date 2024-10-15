@@ -1,4 +1,4 @@
-package no.oslomet.john_job_seeker.response;
+package no.oslomet.john_job_seeker.payload.authentication;
 
 import lombok.Data;
 import no.oslomet.john_job_seeker.dto.UserDTO;
@@ -7,6 +7,5 @@ import no.oslomet.john_job_seeker.dto.UserDTO;
 public class AuthenticationResponse {
     private UserDTO user;
     private String message;
-    private String token;
     private Boolean error;
 }
