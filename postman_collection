@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "c22dc5ef-dc98-4a22-aa00-e27b9111628c",
+		"name": "John: The Job Seeker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8781119"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\":{\r\n        \"firstName\": \"Fredrik\",\r\n        \"lastName\": \"Langsem\",\r\n        \"email\": \"flangsem@gmail.com\",\r\n        \"password\": \"ewredfh\"\r\n    },\r\n    \"token\": true,\r\n    \"tokenSecret\": \"kehdiehiduweoudowueoduwe9udweudo9eud\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "password",
+						"value": "0d3cabe0-61a7-40cb-af3d-bfffca945b15",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "username",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\":{\r\n        \"email\": \"flangsem@gmail.com\",\r\n        \"password\": \"ewredfh\"\r\n    },\r\n    \"token\":true,\r\n    \"tokenSecret\": \"djkhiuehiuhe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "user",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "0d3cabe0-61a7-40cb-af3d-bfffca945b15",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Google Oauth Token Verify",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=ya29.a0AcM612ycfZqvwN04HTzjRfns7vJCtZMYdQ1tRJ-7_gC7KP2TCkV4u1i-hO016kNBeQu1c1u_ShJVYoSfl7_MOrSy2N2KvC24__MyhvzuUSK5hveguIFK4Drd81PWpZG6YGBKr08YvAeEmdpwL4YNv5DmUuZvty2aae0aCgYKAekSARESFQHGX2MiQ4kS-vvQX1aiXWz_JsE1oA0170",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"oauth2",
+						"v1",
+						"userinfo"
+					],
+					"query": [
+						{
+							"key": "alt",
+							"value": "json"
+						},
+						{
+							"key": "access_token",
+							"value": "ya29.a0AcM612ycfZqvwN04HTzjRfns7vJCtZMYdQ1tRJ-7_gC7KP2TCkV4u1i-hO016kNBeQu1c1u_ShJVYoSfl7_MOrSy2N2KvC24__MyhvzuUSK5hveguIFK4Drd81PWpZG6YGBKr08YvAeEmdpwL4YNv5DmUuZvty2aae0aCgYKAekSARESFQHGX2MiQ4kS-vvQX1aiXWz_JsE1oA0170"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PDF Parser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/yuvis/Documents/Reisekvittering - QG3F75.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/document/pdfparser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"document",
+						"pdfparser"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
