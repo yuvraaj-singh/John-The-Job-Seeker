@@ -44,8 +44,11 @@ public class GoogleOauthVerifier {
 
     public UserDTO getUserDetails(String idToken) throws JSONException {
         JSONObject userDetails = fetchUserDetailsFromGoogleAPI(idToken);
-        return new UserDTO(userDetails.getString("given_name"),
-                userDetails.getString("family_name"),
-                userDetails.getString("email"));
+        if(userDetails != null) {
+            return new UserDTO(userDetails.getString("given_name"),
+                    userDetails.getString("family_name"),
+                    userDetails.getString("email"));
+        }
+        return null;
     }
 }

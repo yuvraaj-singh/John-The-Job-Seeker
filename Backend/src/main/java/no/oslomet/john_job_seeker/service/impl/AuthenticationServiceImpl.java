@@ -28,7 +28,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if(authenticationRequest.getToken()){
             UserDTO userDTO = googleOauthVerifier.getUserDetails(authenticationRequest.getTokenSecret());
-            if(userDTO.getEmail().equals(authenticationRequest.getUser().getEmail())){
+
+            if(userDTO != null && userDTO.getEmail().equals(authenticationRequest.getUser().getEmail())){
                 authenticationRequest.getUser().setFirstName(userDTO.getFirstName());
                 authenticationRequest.getUser().setLastName(userDTO.getLastName());
                 authenticationRequest.getUser().setPassword(RandomStringGenerator.generateRandomString());
@@ -36,6 +37,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }else {
                 authenticationResponse.setError(Boolean.TRUE);
                 authenticationResponse.setMessage("Token is not valid");
+                authenticationResponse.setTokenUser(Boolean.TRUE);
+                return authenticationResponse;
             }
         }
 
@@ -57,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findByEmail(authenticationRequest.getUser().getEmail());
         if(authenticationRequest.getToken() && user != null){
             UserDTO userDTO = googleOauthVerifier.getUserDetails(authenticationRequest.getTokenSecret());
-            if(user.getEmail().equals(userDTO.getEmail())){
+            if(userDTO != null && user.getEmail().equals(userDTO.getEmail())){
                 authenticationResponse.setUser(userDTO);
                 authenticationResponse.setMessage("Login successful");
                 authenticationResponse.setError(Boolean.FALSE);
