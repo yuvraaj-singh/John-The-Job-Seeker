@@ -1,5 +1,5 @@
 // DashboardPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -293,6 +293,13 @@ const DashboardPage = () => {
     { author: 'Carrier Coach', text: 'Hi, how can I help you with?' },
   ]);
   const [selectedJobIndex, setSelectedJobIndex] = useState(null);
+  const commentEndRef = useRef(null);
+
+  useEffect(() => {
+    if (commentEndRef.current) {
+      commentEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [comments]);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -411,6 +418,7 @@ const DashboardPage = () => {
                 <strong>{c.author}:</strong> {c.text}
               </div>
             ))}
+            <div ref={commentEndRef} />
           </div>
           <textarea placeholder="Add your comments here..." style={styles.textField} rows="4" value={comment} onChange={(e) => setComment(e.target.value)} />
           <button style={styles.sendButton} onClick={handleSendComment}>Send</button>
