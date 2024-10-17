@@ -309,7 +309,7 @@ const DashboardPage = () => {
         await axios.post('http://localhost:11434/api/chat', {
           model: 'tinyllama',
           messages: [
-            { role: 'system', content: 'Please keep your answers short, concise, and to the point. Always start your responses with "Yes mister,".' },
+            { role: 'system', content: 'Also please keep your answers short and to the point.' },
           ],
           stream: false,
         });
@@ -343,7 +343,7 @@ const DashboardPage = () => {
         if (response.data && response.data.message && response.data.message.content) {
           setComments((prevComments) => [
             ...prevComments,
-            { author: 'Carrier Coach', text: 'Yes mister, ' + response.data.message.content },
+            { author: 'Carrier Coach', text: response.data.message.content },
           ]);
         }
       } catch (error) {
@@ -365,14 +365,43 @@ const DashboardPage = () => {
     console.log('Technologies:', document.querySelector('select[name="technologies"]').value);
   };
 
-  const handleJobClick = (job, index) => {
+  const handleJobClick = async (job, index) => {
     console.log('Job Clicked:', job.title);
     console.log('Company:', job.company);
     console.log('Deadline:', job.deadline);
     console.log('Languages:', job.programmingLanguages);
     console.log('Experience:', job.experience);
     setSelectedJobIndex(index);
+  
+    // Add the job title as the first message from Carrier Coach
+    setComments((prevComments) => [
+      ...prevComments,
+      { author: 'Carrier Coach', text: `You selected the job: ${job.title}. How can I assist you with this job?` },
+    ]);
+    setIsLoading(true);
+    setComment('');
+    // Send job details to Ollama for assistant response
+    try {
+      const response = await axios.post('http://localhost:11434/api/chat', {
+        model: 'tinyllama',
+        messages: [
+          { role: 'user', content: `I am interested in the job: ${job.title} at ${job.company}. The job requires experience in ${job.programmingLanguages} and has a deadline of ${job.deadline}. Please provide some advice.` },
+        ],
+        stream: false,
+      });
+  
+      if (response.data && response.data.message && response.data.message.content) {
+        setComments((prevComments) => [
+          ...prevComments,
+          { author: 'Carrier Coach', text: response.data.message.content },
+        ]);
+      }
+    } catch (error) {
+      console.error('Error communicating with the assistant:', error);
+    }
+    setIsLoading(false);
   };
+  
 
   return (
     <div style={styles.container}>
