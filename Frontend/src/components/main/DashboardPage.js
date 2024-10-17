@@ -319,6 +319,7 @@ const DashboardPage = () => {
         const response = await axios.post('http://localhost:11434/api/chat', {
           model: 'tinyllama',
           messages: [
+            { role: 'user', content: "Please keep your answers short and to the point." },
             { role: 'user', content: comment },
           ],
           stream: false,
