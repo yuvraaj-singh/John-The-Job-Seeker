@@ -1,6 +1,7 @@
 // DashboardPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const styles = {
   header: {
@@ -279,48 +280,6 @@ const jobListings = [
     programmingLanguages: 'Java, SQL',
     experience: '0 years (Internship)',
   },
-  {
-    title: 'Backend Developer',
-    company: 'Innovate Solutions',
-    deadline: 'Mar 15, 2025',
-    programmingLanguages: 'Node.js, Express',
-    experience: '1-3 years',
-  },
-  {
-    title: 'Fullstack Engineer',
-    company: 'TechNova',
-    deadline: 'Apr 30, 2025',
-    programmingLanguages: 'JavaScript, Python',
-    experience: '3-5 years',
-  },
-  {
-    title: 'Systems Analyst',
-    company: 'NetTech',
-    deadline: 'Jun 1, 2025',
-    programmingLanguages: 'SQL, Python',
-    experience: '2-4 years',
-  },
-  {
-    title: 'AI Specialist',
-    company: 'AI Visionary',
-    deadline: 'Jul 20, 2025',
-    programmingLanguages: 'Python, TensorFlow',
-    experience: '4-6 years',
-  },
-  {
-    title: 'DevOps Engineer',
-    company: 'CloudSync',
-    deadline: 'Aug 10, 2025',
-    programmingLanguages: 'Docker, Kubernetes',
-    experience: '3-5 years',
-  },
-  {
-    title: 'UI/UX Designer',
-    company: 'Creative Minds',
-    deadline: 'Sep 25, 2025',
-    programmingLanguages: 'HTML, CSS, JavaScript',
-    experience: '1-3 years',
-  },
 ];
 
 const DashboardPage = () => {
@@ -343,9 +302,26 @@ const DashboardPage = () => {
     }
   };
 
-  const handleSendComment = () => {
+  const handleSendComment = async () => {
     if (comment.trim()) {
       setComments([...comments, { author: 'User', text: comment }]);
+      try {
+        const response = await axios.post('http://localhost:11434/api/chat', {
+          model: 'tinyllama',
+          messages: [
+            { role: 'user', content: comment },
+          ],
+          stream: false,
+        });
+        if (response.data && response.data.message && response.data.message.content) {
+          setComments((prevComments) => [
+            ...prevComments,
+            { author: 'Carrier Coach', text: response.data.message.content },
+          ]);
+        }
+      } catch (error) {
+        console.error('Error communicating with the assistant:', error);
+      }
       setComment('');
     }
   };
