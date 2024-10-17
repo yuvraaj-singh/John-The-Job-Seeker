@@ -293,6 +293,7 @@ const DashboardPage = () => {
     { author: 'Carrier Coach', text: 'Hi, how can I help you with?' },
   ]);
   const [selectedJobIndex, setSelectedJobIndex] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const commentEndRef = useRef(null);
 
   useEffect(() => {
@@ -312,6 +313,8 @@ const DashboardPage = () => {
   const handleSendComment = async () => {
     if (comment.trim()) {
       setComments([...comments, { author: 'User', text: comment }]);
+      setIsLoading(true);
+      setComment('');
       try {
         const response = await axios.post('http://localhost:11434/api/chat', {
           model: 'tinyllama',
@@ -329,7 +332,7 @@ const DashboardPage = () => {
       } catch (error) {
         console.error('Error communicating with the assistant:', error);
       }
-      setComment('');
+      setIsLoading(false);
     }
   };
 
@@ -418,6 +421,9 @@ const DashboardPage = () => {
                 <strong>{c.author}:</strong> {c.text}
               </div>
             ))}
+            {isLoading && (
+              <div style={styles.chatMessage}><strong>Carrier Coach:</strong> Carrier Coach is writing...</div>
+            )}
             <div ref={commentEndRef} />
           </div>
           <textarea placeholder="Add your comments here..." style={styles.textField} rows="4" value={comment} onChange={(e) => setComment(e.target.value)} />
