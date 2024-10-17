@@ -302,6 +302,23 @@ const DashboardPage = () => {
     }
   }, [comments]);
 
+  useEffect(() => {
+    // Send system message to initialize assistant behavior
+    (async () => {
+      try {
+        await axios.post('http://localhost:11434/api/chat', {
+          model: 'tinyllama',
+          messages: [
+            { role: 'system', content: 'Please keep your answers short, concise, and to the point. Always start your responses with "Yes mister,".' },
+          ],
+          stream: false,
+        });
+      } catch (error) {
+        console.error('Error initializing assistant:', error);
+      }
+    })();
+  }, []);
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -319,7 +336,6 @@ const DashboardPage = () => {
         const response = await axios.post('http://localhost:11434/api/chat', {
           model: 'tinyllama',
           messages: [
-            { role: 'system', content: "Please keep your answers short and to the point." },
             { role: 'user', content: comment },
           ],
           stream: false,
@@ -327,7 +343,7 @@ const DashboardPage = () => {
         if (response.data && response.data.message && response.data.message.content) {
           setComments((prevComments) => [
             ...prevComments,
-            { author: 'Carrier Coach', text: response.data.message.content },
+            { author: 'Carrier Coach', text: 'Yes mister, ' + response.data.message.content },
           ]);
         }
       } catch (error) {
