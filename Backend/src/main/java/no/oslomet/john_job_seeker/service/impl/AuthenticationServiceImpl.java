@@ -1,5 +1,6 @@
 package no.oslomet.john_job_seeker.service.impl;
 
+import jakarta.mail.MessagingException;
 import no.oslomet.john_job_seeker.dto.UserDTO;
 import no.oslomet.john_job_seeker.model.User;
 import no.oslomet.john_job_seeker.repository.UserRepository;
@@ -9,8 +10,8 @@ import no.oslomet.john_job_seeker.service.AuthenticationService;
 import no.oslomet.john_job_seeker.utils.GoogleOauthVerifier;
 import no.oslomet.john_job_seeker.utils.PasswordEncorder;
 import no.oslomet.john_job_seeker.utils.RandomStringGenerator;
+import no.oslomet.john_job_seeker.utils.EmailUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 
     private final GoogleOauthVerifier googleOauthVerifier = new GoogleOauthVerifier();
+
+    private EmailUtility emailUtility = new EmailUtility();
 
     public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException {
 
@@ -91,4 +94,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return authenticationResponse;
     }
+
+    public String resetPassword(String email) throws MessagingException {
+        if (userRepository.findByEmail(email) != null){
+            User user = userRepository.findByEmail(email);
+            emailUtility.sendSetPassword(user.getEmail());
+        }
+        return "Please check your email to set a new password";
+    }
+
+
 }
