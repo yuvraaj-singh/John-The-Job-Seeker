@@ -95,12 +95,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return authenticationResponse;
     }
 
-    public String resetPassword(String email) throws MessagingException {
+    public String sendResetPassword(String email) throws MessagingException {
         if (userRepository.findByEmail(email) != null){
             User user = userRepository.findByEmail(email);
             emailUtility.sendSetPassword(user.getEmail());
         }
         return "Please check your email to set a new password";
+    }
+
+    public String resetPassword(String email, String password){
+        User user = userRepository.findByEmail(email);
+        user.setPassword(PasswordEncorder.encode(password));
+        userRepository.save(user);
+        return "New password set successfully";
     }
 
 

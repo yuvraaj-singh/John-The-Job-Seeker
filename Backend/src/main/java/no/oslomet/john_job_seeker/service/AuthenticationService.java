@@ -10,5 +10,6 @@ import org.springframework.stereotype.Service;
 public interface AuthenticationService {
     AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws JSONException;
     AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException;
-    String resetPassword(String email) throws MessagingException;
+    String resetPassword(String email, String password);
+    String sendResetPassword(String email) throws MessagingException;
 }

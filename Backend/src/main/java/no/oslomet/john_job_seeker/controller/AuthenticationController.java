@@ -29,16 +29,19 @@ public class AuthenticationController {
         return authenticationService.login(authenticationRequest);
     }
 
-   /* @PostMapping("/forgotten-Password")
-    public  ResponseEntity<String> forgotten(@RequestParam(name = "email") String email) throws InterruptedException{
-        response =
-        return ResponseEntity.ok(response);
-    }*/
+
+    @PutMapping("/forgotten-Password")
+    public ResponseEntity<String> sendResetPassword(@RequestParam String email) throws MessagingException {
+        return new ResponseEntity<>((authenticationService.sendResetPassword(email)), HttpStatusCode.valueOf(201));
+    }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String email) throws MessagingException {
-        return new ResponseEntity<>((authenticationService.resetPassword(email)), HttpStatusCode.valueOf(201));
+    public ResponseEntity<String> resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "password" ) String password){
+        return new ResponseEntity<>((authenticationService.resetPassword(email, password)), HttpStatusCode.valueOf(201));
     }
+
+
+
 
 
 
