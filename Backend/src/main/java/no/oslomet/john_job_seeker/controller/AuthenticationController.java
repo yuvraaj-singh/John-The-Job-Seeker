@@ -1,5 +1,6 @@
 package no.oslomet.john_job_seeker.controller;
 
+import jakarta.mail.MessagingException;
 import no.oslomet.john_job_seeker.payload.authentication.AuthenticationRequest;
 import no.oslomet.john_job_seeker.payload.authentication.AuthenticationResponse;
 import no.oslomet.john_job_seeker.service.AuthenticationService;
@@ -23,6 +24,17 @@ public class AuthenticationController {
     @PostMapping("/auth/login")
     public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest) throws JSONException {
         return authenticationService.login(authenticationRequest);
+    }
+
+
+    @PutMapping("/forgotten-Password")
+    public AuthenticationResponse sendResetPassword(@RequestParam String email) throws MessagingException {
+        return authenticationService.sendResetPassword(email);
+    }
+
+    @PutMapping("/reset-password")
+    public AuthenticationResponse resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "password" ) String password){
+        return authenticationService.resetPassword(email, password);
     }
 
 }
