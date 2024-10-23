@@ -25,7 +25,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final GoogleOauthVerifier googleOauthVerifier = new GoogleOauthVerifier();
 
-    private EmailUtility emailUtility = new EmailUtility();
+    @Autowired
+    private EmailUtility emailUtility;
 
     public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException {
 
@@ -95,19 +96,45 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return authenticationResponse;
     }
 
-    public String sendResetPassword(String email) throws MessagingException {
-        if (userRepository.findByEmail(email) != null){
+    public AuthenticationResponse sendResetPassword(String email) throws MessagingException {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(email);
+        if(userRepository.findByEmail(email) != null){
             User user = userRepository.findByEmail(email);
             emailUtility.sendSetPassword(user.getEmail());
+            authenticationResponse.setUser(userDTO);
+            authenticationResponse.setError(Boolean.FALSE);
+            authenticationResponse.setMessage("Please check your email to set a new password");
         }
-        return "Please check your email to set a new password";
+        else{
+            authenticationResponse.setMessage("No user with email: " +  email + " found");
+            authenticationResponse.setError(Boolean.TRUE);
+        }
+        return authenticationResponse;
+
     }
 
-    public String resetPassword(String email, String password){
-        User user = userRepository.findByEmail(email);
-        user.setPassword(PasswordEncorder.encode(password));
-        userRepository.save(user);
-        return "New password set successfully";
+    public AuthenticationResponse resetPassword(String email, String password){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(email);
+        if (userRepository.findByEmail(email) != null) {
+            User user = userRepository.findByEmail(email);
+            if (!(user.getPassword().equals(PasswordEncorder.encode(password)))) {
+                user.setPassword(PasswordEncorder.encode(password));
+                userRepository.save(user);
+                authenticationResponse.setMessage("New password set successfully");
+                authenticationResponse.setError(Boolean.FALSE);
+                authenticationResponse.setUser(userDTO);
+            } else {
+                authenticationResponse.setUser(userDTO);
+                authenticationResponse.setMessage("You cannot use the same password as the current one");
+                authenticationResponse.setError(Boolean.TRUE);
+            }
+            return authenticationResponse;
+        }
+        authenticationResponse.setMessage("Could not find an account with this email");
+        authenticationResponse.setError(Boolean.TRUE);
+        return authenticationResponse;
     }
 
 

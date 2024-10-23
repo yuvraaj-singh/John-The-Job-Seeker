@@ -4,22 +4,27 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailUtility {
+
     @Autowired
-    private final JavaMailSender javaMailSender = new JavaMailSenderImpl();
+    private JavaMailSender mailSender;
 
     public void sendSetPassword(String email) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-        mimeMessageHelper.setTo(email);
-        mimeMessageHelper.setSubject("Reset password");
-        mimeMessageHelper.setText("""
-        <div>
-          <a href="http://localhost:8080/set-password?email=%s" target="_blank">click link to set new password</a>
-        </div>
-        """.formatted(email), true);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        String htmlMsg = "<div>\n" +
+                String.format("<a href=\"http://localhost:8080/api/reset-password?email=%s\" target=\"_blank\">click link to set new password</a>\n", email) +
+                "        </div>";
+
+        helper.setText(htmlMsg, true);
+        helper.setTo(email);
+        helper.setSubject("Reset password");
+        helper.setFrom("flangsem@gmail.com");
+        mailSender.send(mimeMessage);
     }
 }
