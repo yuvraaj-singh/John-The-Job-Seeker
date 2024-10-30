@@ -28,7 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private EmailUtility emailUtility;
 
-    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException {
+    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException, MessagingException {
 
         if(authenticationRequest.getToken()){
             UserDTO userDTO = googleOauthVerifier.getUserDetails(authenticationRequest.getTokenSecret());
@@ -55,11 +55,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             authenticationResponse.setUser(new UserDTO(user.getFirstName(),user.getLastName(),user.getEmail()));
             authenticationResponse.setError(Boolean.FALSE);
             authenticationResponse.setMessage("Registered successfully");
+            emailUtility.sendWelcomeMessage(user);
         }
         return authenticationResponse;
     }
 
-    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws JSONException {
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws JSONException, MessagingException {
 
         User user = userRepository.findByEmail(authenticationRequest.getUser().getEmail());
         if(authenticationRequest.getToken() && user != null){

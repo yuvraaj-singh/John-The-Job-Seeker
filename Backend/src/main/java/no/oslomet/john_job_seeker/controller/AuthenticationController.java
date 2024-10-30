@@ -17,12 +17,12 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/auth/register")
-    public AuthenticationResponse register(@RequestBody AuthenticationRequest authenticationRequest) throws JSONException {
+    public AuthenticationResponse register(@RequestBody AuthenticationRequest authenticationRequest) throws JSONException, MessagingException {
         return authenticationService.register(authenticationRequest);
     }
 
     @PostMapping("/auth/login")
-    public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest) throws JSONException {
+    public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest) throws JSONException, MessagingException {
         return authenticationService.login(authenticationRequest);
     }
 
