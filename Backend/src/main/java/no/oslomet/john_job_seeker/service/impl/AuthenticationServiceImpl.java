@@ -1,5 +1,6 @@
 package no.oslomet.john_job_seeker.service.impl;
 
+import jakarta.mail.MessagingException;
 import no.oslomet.john_job_seeker.dto.UserDTO;
 import no.oslomet.john_job_seeker.model.User;
 import no.oslomet.john_job_seeker.repository.UserRepository;
@@ -9,8 +10,8 @@ import no.oslomet.john_job_seeker.service.AuthenticationService;
 import no.oslomet.john_job_seeker.utils.GoogleOauthVerifier;
 import no.oslomet.john_job_seeker.utils.PasswordEncorder;
 import no.oslomet.john_job_seeker.utils.RandomStringGenerator;
+import no.oslomet.john_job_seeker.utils.EmailUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final GoogleOauthVerifier googleOauthVerifier = new GoogleOauthVerifier();
 
-    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException {
+    @Autowired
+    private EmailUtility emailUtility;
+
+    public AuthenticationResponse register(AuthenticationRequest authenticationRequest) throws JSONException, MessagingException {
 
         if(authenticationRequest.getToken()){
             UserDTO userDTO = googleOauthVerifier.getUserDetails(authenticationRequest.getTokenSecret());
@@ -51,11 +55,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             authenticationResponse.setUser(new UserDTO(user.getFirstName(),user.getLastName(),user.getEmail()));
             authenticationResponse.setError(Boolean.FALSE);
             authenticationResponse.setMessage("Registered successfully");
+            emailUtility.sendWelcomeMessage(user);
         }
         return authenticationResponse;
     }
 
-    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws JSONException {
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws JSONException, MessagingException {
 
         User user = userRepository.findByEmail(authenticationRequest.getUser().getEmail());
         if(authenticationRequest.getToken() && user != null){
@@ -91,4 +96,47 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return authenticationResponse;
     }
+
+    public AuthenticationResponse sendResetPassword(String email) throws MessagingException {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(email);
+        if(userRepository.findByEmail(email) != null){
+            User user = userRepository.findByEmail(email);
+            emailUtility.sendSetPassword(user.getEmail());
+            authenticationResponse.setUser(userDTO);
+            authenticationResponse.setError(Boolean.FALSE);
+            authenticationResponse.setMessage("Please check your email to set a new password");
+        }
+        else{
+            authenticationResponse.setMessage("No user with email: " +  email + " found");
+            authenticationResponse.setError(Boolean.TRUE);
+        }
+        return authenticationResponse;
+
+    }
+
+    public AuthenticationResponse resetPassword(String email, String password){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(email);
+        if (userRepository.findByEmail(email) != null) {
+            User user = userRepository.findByEmail(email);
+            if (!(user.getPassword().equals(PasswordEncorder.encode(password)))) {
+                user.setPassword(PasswordEncorder.encode(password));
+                userRepository.save(user);
+                authenticationResponse.setMessage("New password set successfully");
+                authenticationResponse.setError(Boolean.FALSE);
+                authenticationResponse.setUser(userDTO);
+            } else {
+                authenticationResponse.setUser(userDTO);
+                authenticationResponse.setMessage("You cannot use the same password as the current one");
+                authenticationResponse.setError(Boolean.TRUE);
+            }
+            return authenticationResponse;
+        }
+        authenticationResponse.setMessage("Could not find an account with this email");
+        authenticationResponse.setError(Boolean.TRUE);
+        return authenticationResponse;
+    }
+
+
 }
